@@ -39,12 +39,17 @@ class JEEPrepBotDB:
         
         # Now, ask the model to solve the new question based on the similar one
         prompt = (
-            f"{similar_question_prompt} - This is a similar question, and it provides a reliable solution explanation. "
-            f"Use only this explanation to solve the question below, strictly following each step without deviation. "
-            f"Do not infer or make assumptions beyond the steps provided in the similar question. "
-            f"Question to Solve: {query}. Please provide a one line,  solution that mirrors the explanation above, "
-            f"and dont give the final additional explanation."
-        )
+        f"Here is a similar question with a solution method: {similar_question_prompt}. "
+        f"This solution provides a reliable method for answering questions of this type. "
+        f"To solve the new question, carefully analyze both the similarities and differences between the similar question and the new question. "
+        f"Pay close attention to the specific numbers, coefficients, and conditions in the new question, as these may require an adjustment in the solution method. "
+        f"Do not simply replicate the same method; instead, adapt it based on any new variables, conditions, or parameters present in the new question. "
+        f"Take into account all the changes and ensure your answer reflects those correctly. "
+        f"Question to Solve: {query}. "
+        f"Please provide a one-line solution that follows the same logic as the similar question but has been modified to fit the new details accurately."
+    )
+
+
 
 
         return self.generate_response(prompt)   
@@ -117,17 +122,7 @@ class JEEPrepBotDB:
 
     def add_sample_question(self):
         """Add a specific question to the database."""
-        question_data = {
-            "question": "The upper half of an inclined plane with inclination Φ is perfectly smooth, while the lower half is rough. A body starting from rest at the top will again come to rest at the bottom if the coefficient of friction for the lower half is given by?",
-            "topic": "Inclined Planes and Friction",
-            "correct_answer": "2 tanΦ",
-            "options": [
-                {"text": "2 sinΦ", "is_correct": False, "explanation": None},
-                {"text": "2 cosΦ", "is_correct": False, "explanation": None},
-                {"text": "2 tanΦ", "is_correct": True, "explanation": "The coefficient of friction is calculated by equating the work done by friction to the decrease in potential energy as the block slides down."},
-                {"text": "tanΦ", "is_correct": False, "explanation": None}
-            ]
-        }
+        question_data = {"question": "20 mL of 0.1 M NH 4 OH is mixed with 40 mL of 0.05 M HCl. The pH of the mixture is nearest to ?", "topic": "Chemical Reactions and Stoichiometry", "correct_answer": "6.2", "options": [{"text": "4.2", "is_correct": False, "explanation": None}, {"text": "5.2", "is_correct": True, "explanation": " \\(\x08egin{array}{l}\x08egin{matrix}NH_4OH & + & HCl & \\longrightarrow & NH_4Cl+H_2O \\20\\ mL, 0.1\\ M & & 40\\ mL, 0.05\\ M & & \\2\\ mmoles & & 2\\ mmoles & & 2\\ mmoles \\\\end{matrix}\\end{array} \\) , \\(\x08egin{array}{l} =\x0crac{1}{2}\\left[14-5-\\left(-1.48\right)\right] = 5.24\\end{array} \\)"}, {"text": "6.2", "is_correct": False, "explanation": None}]}
         
         # Pass the data to the database manager for processing
         self.db_manager.add_question(question_data)
@@ -157,7 +152,9 @@ class JEEPrepBotDB:
 if __name__ == "__main__":
     bot = JEEPrepBotDB()
     # bot.add_sample_question()
-    query = "The upper half of an inclined plane with inclination Φ is perfectly smooth, while the lower half is rough. A body starting from rest at the top will again come to rest at the bottom if the coefficient of friction for the lower half is given by?"
+    query = "The interhalogen compound formed from the reaction of bromine with excess of fluorine is a :"
+
+
     response = bot.answer_question(query)
     print(response)
     bot.close()
